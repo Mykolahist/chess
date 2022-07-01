@@ -18,6 +18,46 @@ export class Cell {
     this.figure = figure;
     this.board = board;
     this.available = false;
-    this.id = Math.random()
-  }
+    this.id = Math.random();
+  };
+
+  isEmpty() {
+    return this.figure === null;
+  };
+
+  isEmptyVertical(target: Cell): boolean {
+    if (this.x !== target.x) {
+      return false;
+    };
+
+    const min = Math.min(this.y, target.y);
+    const max = Math.max(this.y, target.y);
+    for (let y = min + 1; y < max; y++) {
+      if (!this.board.getCell(this.x, y).isEmpty()) {
+        return false;
+      };
+    };
+    return true;
+  };
+
+  isEmptyHorizontal(target: Cell): boolean {
+    return true;
+  };
+
+  isEmptyDiagonal(target: Cell): boolean {
+    return true;
+  };
+
+  setFigure(figure: Figure) {
+    this.figure = figure;
+    this.figure.cell = this;
+  };
+
+  moveFigure(target: Cell) {
+    if (this.figure && this.figure?.canMove(target)) {
+      this.figure.moveFigure(target);
+      target.setFigure(this.figure);
+      this.figure = null;
+    };
+  };
 };
